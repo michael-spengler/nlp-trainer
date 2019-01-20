@@ -1,5 +1,5 @@
-export interface IIntents {
-    intent: string
+export interface IIntent {
+    name: string
     language: string
     utterances: string[]
     answers: IAnswer[]
@@ -8,7 +8,7 @@ export interface IIntents {
 export interface IMapEntry {
     id: string
     ownerID: string
-    intents: IIntents[]
+    intents: IIntent[]
 }
 
 export interface IUtterance {

@@ -1,8 +1,36 @@
 import * as uniqid from "uniqid"
 import { exampleMap } from "./example-data"
-import { IIntents, IMapEntry } from "./types"
+import { IAnswer, IIntent, IMapEntry } from "./types"
 
 export class NLPTrainer {
+
+    private static validateTrainingData(intents: IIntent[]): string[] {
+        const errors: string[] = []
+        const utterances: string[] = []
+        const actions: string[] = []
+
+        intents.forEach((intent: IIntent) => {
+            intent.answers.forEach((answer: IAnswer) => {
+                answer.actions.forEach((action: string) => {
+                    actions.push(action)
+                })
+            })
+        })
+
+        intents.forEach((intent: IIntent) => {
+            intent.utterances.forEach((utterance: string) => {
+                utterances.push(utterance)
+            })
+        })
+
+        actions.forEach((action: string) => {
+            if (!utterances.some((utterance: string) => utterance === action)) {
+                errors.push(`Please add an utterance for action: ${action}`)
+            }
+        })
+
+        return errors
+    }
 
     private maps: IMapEntry[] = []
 
@@ -19,22 +47,30 @@ export class NLPTrainer {
         this.maps.slice(0, 1)
     }
 
-    public saveTrainingMap(id: string, trainingData: IIntents[]): IMapEntry {
+    public saveTrainingData(id: string, trainingData: IIntent[]): IMapEntry {
+
         if (this.maps.some((entry: IMapEntry) => id === entry.id)) {
             throw new Error(`tried to save duplicate entries for key ${id}`)
         }
-        const newMapEntry: IMapEntry = {
-            id,
-            intents: trainingData,
-            ownerID: uniqid(new Date().toISOString()),
+
+        if (NLPTrainer.validateTrainingData(trainingData).length > 0) {
+            throw new Error(`Errors while validating training data: \n${NLPTrainer.validateTrainingData(trainingData)}`)
+        } else {
+
+            const newMapEntry: IMapEntry = {
+                id,
+                intents: trainingData,
+                ownerID: uniqid(new Date().toISOString()),
+            }
+
+            this.maps.push(newMapEntry)
+
+            return newMapEntry
         }
-
-        this.maps.push(newMapEntry)
-
-        return newMapEntry
     }
 
-    public getTrainingMap(id: string): IIntents[] {
+    public getTrainingMap(id: string): IIntent[] {
+
         const filteredMaps: IMapEntry[] =
             this.maps.filter((map: IMapEntry) => map.id === id)
 

@@ -1,2 +1,2 @@
-import { IIntents } from "./types";
-export declare const exampleMap: IIntents[];
+import { IIntent } from "./types";
+export declare const exampleMap: IIntent[];

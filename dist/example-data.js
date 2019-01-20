@@ -12,8 +12,8 @@ exports.exampleMap = [
                 text: "see you soon!",
             }
         ],
-        intent: "greetings.bye",
         language: "en",
+        name: "greetings.bye",
         utterances: ["goodbye for now", "bye bye take care", "cu", "bye"],
     },
     {
@@ -23,8 +23,8 @@ exports.exampleMap = [
                 text: "hey man",
             }
         ],
-        intent: "greetings.hello",
         language: "en",
+        name: "greetings.hello",
         utterances: ["hello how are you", "hi", "hey", "he", "hihi", "Hey. I'm |||name|||",
             "heyhey", "heyyyy how are you"],
     },
@@ -35,8 +35,8 @@ exports.exampleMap = [
                 text: "You're welcome",
             }
         ],
-        intent: "say.thanks",
         language: "en",
+        name: "say.thanks",
         utterances: ["Thanks", "thumbs up"],
     },
     {
@@ -46,8 +46,8 @@ exports.exampleMap = [
                 text: "Which answer would you like better?",
             }
         ],
-        intent: "improve",
         language: "en",
+        name: "improve",
         utterances: ["thumbs down"],
     },
 ];

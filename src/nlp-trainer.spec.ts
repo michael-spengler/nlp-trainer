@@ -1,6 +1,6 @@
 import { exampleMap } from "./example-data"
 import { NLPTrainer } from "./nlp-trainer"
-import { IMapEntry } from "./types"
+import { IIntent, IMapEntry } from "./types"
 
 let nlpTrainer: NLPTrainer
 
@@ -12,7 +12,7 @@ describe("NLPTrainer", () => {
 
     it("saves and provides trainingdata", async () => {
         const newMap: IMapEntry =
-            nlpTrainer.saveTrainingMap("Unit Test Map", exampleMap)
+            nlpTrainer.saveTrainingData("Unit Test Map", exampleMap)
 
         expect(newMap.id)
             .toEqual("Unit Test Map")
@@ -26,13 +26,36 @@ describe("NLPTrainer", () => {
 
     it("throws an error for duplicate entries", async () => {
 
-        nlpTrainer.saveTrainingMap("Unit Test Map", exampleMap)
+        nlpTrainer.saveTrainingData("Unit Test Map", exampleMap)
 
         try {
-            nlpTrainer.saveTrainingMap("Unit Test Map", exampleMap)
+            nlpTrainer.saveTrainingData("Unit Test Map", exampleMap)
             fail("should have thrown an error for duplicate entries")
         } catch (error) {
             // works as designed
         }
     })
+
+    it("rejects inconsistent training data", async () => {
+        const intentContainingAnswerWithUnknownAction: IIntent = {
+            answers: [{
+                actions: ["unknownAction"],
+                text: "42",
+            }],
+            language: "en",
+            name: "answer-contains-unknown-action",
+            utterances: ["42"],
+        }
+        const map: IIntent[] = exampleMap
+        map.push(intentContainingAnswerWithUnknownAction)
+        try {
+            await nlpTrainer.saveTrainingData("inconsistentTrainingData", map)
+
+            fail("please let me think about it")
+
+        } catch (error) {
+            // works as designed
+        }
+    })
+
 })
