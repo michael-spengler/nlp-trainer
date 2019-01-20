@@ -1,8 +1,9 @@
-import { IIntent, IMapEntry } from "./types";
+import { IIntent, IMapEntry as IDataEntry } from "./types";
 export declare class NLPTrainer {
-    private maps;
+    private static validateTrainingData(intents);
+    private trainingDataLibrary;
     constructor();
-    deleteTrainingMap(id: string, ownerID: string): void;
-    saveTrainingMap(id: string, trainingData: IIntent[]): IMapEntry;
-    getTrainingMap(id: string): IIntent[];
+    deleteTrainingDataEntry(id: string, ownerID: string): void;
+    saveTrainingDataEntry(id: string, trainingData: IIntent[]): IDataEntry;
+    getTrainingMap(id: string): IIntent[] | undefined;
 }
