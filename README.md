@@ -2,8 +2,10 @@
 As simple as it gets
 
 ## Preparation
+tbd
 
 ## Usage Example
+tbd 
 
 ## Feedback
 If you find any issues or want to share improvement proposals in general feel free to open an issue [here](https://github.com/michael-spengler/nlp-trainer/issues).
