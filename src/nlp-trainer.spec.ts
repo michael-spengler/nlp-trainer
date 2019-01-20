@@ -12,7 +12,7 @@ describe("NLPTrainer", () => {
 
     it("saves and provides trainingdata", async () => {
         const newMap: IMapEntry =
-            nlpTrainer.saveTrainingData("Unit Test Map", exampleMap)
+            nlpTrainer.saveTrainingDataEntry("Unit Test Map", exampleMap)
 
         expect(newMap.id)
             .toEqual("Unit Test Map")
@@ -24,12 +24,31 @@ describe("NLPTrainer", () => {
             .toEqual(exampleMap)
     })
 
-    it("throws an error for duplicate entries", async () => {
+    it("deletes trainingdata entry", async () => {
+        const newMap: IMapEntry =
+            nlpTrainer.saveTrainingDataEntry("Unit Test Map", exampleMap)
 
-        nlpTrainer.saveTrainingData("Unit Test Map", exampleMap)
+        nlpTrainer.deleteTrainingDataEntry("Unit Test Map", newMap.ownerID)
+
+        expect(nlpTrainer.getTrainingMap("Unit Test Map"))
+            .toEqual(undefined)
+    })
+
+    it("does not delete trainingdata when ownerID is wrong", async () => {
+        const newMap: IMapEntry =
+            nlpTrainer.saveTrainingDataEntry("4711", exampleMap)
+
+        nlpTrainer.deleteTrainingDataEntry("4711", "12345")
+
+        expect(nlpTrainer.getTrainingMap("4711"))
+            .toEqual(exampleMap)
+    })
+
+    it("throws an error for duplicate entries", async () => {
+        nlpTrainer.saveTrainingDataEntry("Unit Test Map", exampleMap)
 
         try {
-            nlpTrainer.saveTrainingData("Unit Test Map", exampleMap)
+            nlpTrainer.saveTrainingDataEntry("Unit Test Map", exampleMap)
             fail("should have thrown an error for duplicate entries")
         } catch (error) {
             // works as designed
@@ -49,7 +68,7 @@ describe("NLPTrainer", () => {
         const map: IIntent[] = exampleMap
         map.push(intentContainingAnswerWithUnknownAction)
         try {
-            await nlpTrainer.saveTrainingData("inconsistentTrainingData", map)
+            await nlpTrainer.saveTrainingDataEntry("inconsistentTrainingData", map)
 
             fail("please let me think about it")
 

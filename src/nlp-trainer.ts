@@ -1,6 +1,6 @@
 import * as uniqid from "uniqid"
 import { exampleMap } from "./example-data"
-import { IAnswer, IIntent, IMapEntry } from "./types"
+import { IAnswer, IIntent, IMapEntry as IDataEntry } from "./types"
 
 export class NLPTrainer {
 
@@ -32,52 +32,62 @@ export class NLPTrainer {
         return errors
     }
 
-    private maps: IMapEntry[] = []
+    private trainingDataLibrary: IDataEntry[] = []
 
     public constructor() {
-        const exampleMapEntry: IMapEntry = {
+        const exampleMapEntry: IDataEntry = {
             id: "exampleMap",
             intents: exampleMap,
             ownerID: "exampleUser",
         }
-        this.maps.push(exampleMapEntry)
+        this.trainingDataLibrary.push(exampleMapEntry)
     }
 
-    public deleteTrainingMap(id: string, ownerID: string): void {
-        this.maps.slice(0, 1)
+    public deleteTrainingDataEntry(id: string, ownerID: string): void {
+        const index: number = this.trainingDataLibrary.indexOf(
+            this.trainingDataLibrary.filter((entry: IDataEntry) => {
+                if (entry.id === id && entry.ownerID === ownerID) {
+                    return entry
+                }
+            })[0])
+        if (index !== -1) {
+            this.trainingDataLibrary.splice(index, 1)
+        }
     }
 
-    public saveTrainingData(id: string, trainingData: IIntent[]): IMapEntry {
+    public saveTrainingDataEntry(id: string, trainingData: IIntent[]): IDataEntry {
 
-        if (this.maps.some((entry: IMapEntry) => id === entry.id)) {
-            throw new Error(`tried to save duplicate entries for key ${id}`)
+        if (this.trainingDataLibrary.some((entry: IDataEntry) => id === entry.id)) {
+            throw new Error(`tried to save duplicate entries for id ${id}`)
         }
 
         if (NLPTrainer.validateTrainingData(trainingData).length > 0) {
             throw new Error(`Errors while validating training data: \n${NLPTrainer.validateTrainingData(trainingData)}`)
         } else {
 
-            const newMapEntry: IMapEntry = {
+            const newMapEntry: IDataEntry = {
                 id,
                 intents: trainingData,
-                ownerID: uniqid(new Date().toISOString()),
+                ownerID: uniqid(`ownerID-${new Date().toISOString()}`),
             }
 
-            this.maps.push(newMapEntry)
+            this.trainingDataLibrary.push(newMapEntry)
 
             return newMapEntry
         }
     }
 
-    public getTrainingMap(id: string): IIntent[] {
+    public getTrainingMap(id: string): IIntent[] | undefined {
 
-        const filteredMaps: IMapEntry[] =
-            this.maps.filter((map: IMapEntry) => map.id === id)
+        const filteredMaps: IDataEntry[] =
+            this.trainingDataLibrary.filter((map: IDataEntry) => map.id === id)
 
         if (filteredMaps.length > 1) {
             throw new Error(`duplicate entries for id ${id}`)
+        } else if (filteredMaps.length === 1) {
+            return filteredMaps[0].intents
+        } else {
+            return undefined
         }
-
-        return filteredMaps[0].intents
     }
 }
