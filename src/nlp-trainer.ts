@@ -32,7 +32,7 @@ export class NLPTrainer {
         return errors
     }
 
-    private trainingDataLibrary: IDataEntry[] = []
+    private readonly trainingDataLibrary: IDataEntry[] = []
 
     public constructor() {
         const exampleMapEntry: IDataEntry = {
@@ -43,19 +43,24 @@ export class NLPTrainer {
         this.trainingDataLibrary.push(exampleMapEntry)
     }
 
-    public deleteTrainingDataEntry(id: string, ownerID: string): void {
+    public async deleteMapEntry(id: string, ownerID: string): Promise<void> {
+
+        // delete from DB can be implemented here
+
         const index: number = this.trainingDataLibrary.indexOf(
             this.trainingDataLibrary.filter((entry: IDataEntry) => {
                 if (entry.id === id && entry.ownerID === ownerID) {
                     return entry
                 }
             })[0])
-        if (index !== -1) {
+        if (index === -1) {
+            throw new Error(`tried to delete something which is not there id: ${id} ownerID: ${ownerID}`)
+        } else {
             this.trainingDataLibrary.splice(index, 1)
         }
     }
 
-    public saveTrainingDataEntry(id: string, trainingData: IIntent[]): IDataEntry {
+    public async saveMapEntry(id: string, trainingData: IIntent[]): Promise<IDataEntry> {
 
         if (this.trainingDataLibrary.some((entry: IDataEntry) => id === entry.id)) {
             throw new Error(`tried to save duplicate entries for id ${id}`)
@@ -73,11 +78,14 @@ export class NLPTrainer {
 
             this.trainingDataLibrary.push(newMapEntry)
 
+            // save to DB can be implemented here
             return newMapEntry
         }
     }
 
-    public getTrainingMap(id: string): IIntent[] | undefined {
+    public async getIntents(id: string): Promise<IIntent[]> {
+
+        // read from DB can be implemented here
 
         const filteredMaps: IDataEntry[] =
             this.trainingDataLibrary.filter((map: IDataEntry) => map.id === id)
@@ -87,7 +95,7 @@ export class NLPTrainer {
         } else if (filteredMaps.length === 1) {
             return filteredMaps[0].intents
         } else {
-            return undefined
+            throw new Error(`Could not find training data for id: ${id}`)
         }
     }
 }

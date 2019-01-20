@@ -12,7 +12,7 @@ describe("NLPTrainer", () => {
 
     it("saves and provides trainingdata", async () => {
         const newMap: IMapEntry =
-            nlpTrainer.saveTrainingDataEntry("Unit Test Map", exampleMap)
+            await nlpTrainer.saveMapEntry("Unit Test Map", exampleMap)
 
         expect(newMap.id)
             .toEqual("Unit Test Map")
@@ -20,35 +20,41 @@ describe("NLPTrainer", () => {
         expect(newMap.ownerID)
             .toBeDefined()
 
-        expect(nlpTrainer.getTrainingMap("Unit Test Map"))
+        expect(await nlpTrainer.getIntents("Unit Test Map"))
             .toEqual(exampleMap)
     })
 
     it("deletes trainingdata entry", async () => {
-        const newMap: IMapEntry =
-            nlpTrainer.saveTrainingDataEntry("Unit Test Map", exampleMap)
+        const newMapEntry: IMapEntry =
+            await nlpTrainer.saveMapEntry("Unit Test Map", exampleMap)
 
-        nlpTrainer.deleteTrainingDataEntry("Unit Test Map", newMap.ownerID)
+        await nlpTrainer.deleteMapEntry("Unit Test Map", newMapEntry.ownerID)
 
-        expect(nlpTrainer.getTrainingMap("Unit Test Map"))
-            .toEqual(undefined)
+        try {
+            await nlpTrainer.getIntents("Unit Test Map")
+            fail("should raise an error")
+        } catch (error) {
+            // works as defined
+        }
     })
 
     it("does not delete trainingdata when ownerID is wrong", async () => {
-        const newMap: IMapEntry =
-            nlpTrainer.saveTrainingDataEntry("4711", exampleMap)
+        await nlpTrainer.saveMapEntry("4711", exampleMap)
 
-        nlpTrainer.deleteTrainingDataEntry("4711", "12345")
-
-        expect(nlpTrainer.getTrainingMap("4711"))
-            .toEqual(exampleMap)
+        try {
+            await nlpTrainer.deleteMapEntry("4711", "12345")
+            fail("error expected")
+        } catch (error) {
+            expect(await nlpTrainer.getIntents("4711"))
+                .toEqual(exampleMap)
+        }
     })
 
     it("throws an error for duplicate entries", async () => {
-        nlpTrainer.saveTrainingDataEntry("Unit Test Map", exampleMap)
+        await nlpTrainer.saveMapEntry("Unit Test Map", exampleMap)
 
         try {
-            nlpTrainer.saveTrainingDataEntry("Unit Test Map", exampleMap)
+            await nlpTrainer.saveMapEntry("Unit Test Map", exampleMap)
             fail("should have thrown an error for duplicate entries")
         } catch (error) {
             // works as designed
@@ -68,7 +74,7 @@ describe("NLPTrainer", () => {
         const map: IIntent[] = exampleMap
         map.push(intentContainingAnswerWithUnknownAction)
         try {
-            await nlpTrainer.saveTrainingDataEntry("inconsistentTrainingData", map)
+            await nlpTrainer.saveMapEntry("inconsistentTrainingData", map)
 
             fail("please let me think about it")
 
