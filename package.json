@@ -1,6 +1,6 @@
 {
   "name": "nlp-trainer",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "As simple as it gets",
   "main": "./dist/index.js",
   "typings": "./dist/index.js",
@@ -8,7 +8,7 @@
     "test": "jest",
     "test:cov": "jest --coverage",
     "tslint": "tslint -p ./",
-    "build-and-publish": "tsc && npm publish"
+    "bp": "tsc && npm publish"
   },
   "repository": {
     "type": "git",

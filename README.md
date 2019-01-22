@@ -1,5 +1,6 @@
 # Natural Language Processing Trainer
-As simple as it gets
+As simple as it gets  
+This package is e.g. used in [this package](https://www.npmjs.com/package/nlp-with-actions)
 
 ## Usage Example
     import { IIntent, NLPTrainer, exampleData, IMapEntry } 

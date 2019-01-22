@@ -35,17 +35,21 @@ class NLPTrainer {
         });
         return errors;
     }
-    deleteTrainingDataEntry(id, ownerID) {
+    async deleteMapEntry(id, ownerID) {
+        // delete from DB can be implemented here
         const index = this.trainingDataLibrary.indexOf(this.trainingDataLibrary.filter((entry) => {
             if (entry.id === id && entry.ownerID === ownerID) {
                 return entry;
             }
         })[0]);
-        if (index !== -1) {
+        if (index === -1) {
+            throw new Error(`tried to delete something which is not there id: ${id} ownerID: ${ownerID}`);
+        }
+        else {
             this.trainingDataLibrary.splice(index, 1);
         }
     }
-    saveTrainingDataEntry(id, trainingData) {
+    async saveMapEntry(id, trainingData) {
         if (this.trainingDataLibrary.some((entry) => id === entry.id)) {
             throw new Error(`tried to save duplicate entries for id ${id}`);
         }
@@ -59,10 +63,12 @@ class NLPTrainer {
                 ownerID: uniqid(`ownerID-${new Date().toISOString()}`),
             };
             this.trainingDataLibrary.push(newMapEntry);
+            // save to DB can be implemented here
             return newMapEntry;
         }
     }
-    getTrainingMap(id) {
+    async getIntents(id) {
+        // read from DB can be implemented here
         const filteredMaps = this.trainingDataLibrary.filter((map) => map.id === id);
         if (filteredMaps.length > 1) {
             throw new Error(`duplicate entries for id ${id}`);
@@ -71,7 +77,7 @@ class NLPTrainer {
             return filteredMaps[0].intents;
         }
         else {
-            return undefined;
+            throw new Error(`Could not find training data for id: ${id}`);
         }
     }
 }

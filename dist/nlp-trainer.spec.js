@@ -9,30 +9,40 @@ describe("NLPTrainer", () => {
             new nlp_trainer_1.NLPTrainer();
     });
     it("saves and provides trainingdata", async () => {
-        const newMap = nlpTrainer.saveTrainingDataEntry("Unit Test Map", example_data_1.exampleMap);
+        const newMap = await nlpTrainer.saveMapEntry("Unit Test Map", example_data_1.exampleMap);
         expect(newMap.id)
             .toEqual("Unit Test Map");
         expect(newMap.ownerID)
             .toBeDefined();
-        expect(nlpTrainer.getTrainingMap("Unit Test Map"))
+        expect(await nlpTrainer.getIntents("Unit Test Map"))
             .toEqual(example_data_1.exampleMap);
     });
     it("deletes trainingdata entry", async () => {
-        const newMap = nlpTrainer.saveTrainingDataEntry("Unit Test Map", example_data_1.exampleMap);
-        nlpTrainer.deleteTrainingDataEntry("Unit Test Map", newMap.ownerID);
-        expect(nlpTrainer.getTrainingMap("Unit Test Map"))
-            .toEqual(undefined);
+        const newMapEntry = await nlpTrainer.saveMapEntry("Unit Test Map", example_data_1.exampleMap);
+        await nlpTrainer.deleteMapEntry("Unit Test Map", newMapEntry.ownerID);
+        try {
+            await nlpTrainer.getIntents("Unit Test Map");
+            fail("should raise an error");
+        }
+        catch (error) {
+            // works as defined
+        }
     });
     it("does not delete trainingdata when ownerID is wrong", async () => {
-        const newMap = nlpTrainer.saveTrainingDataEntry("4711", example_data_1.exampleMap);
-        nlpTrainer.deleteTrainingDataEntry("4711", "12345");
-        expect(nlpTrainer.getTrainingMap("4711"))
-            .toEqual(example_data_1.exampleMap);
+        await nlpTrainer.saveMapEntry("4711", example_data_1.exampleMap);
+        try {
+            await nlpTrainer.deleteMapEntry("4711", "12345");
+            fail("error expected");
+        }
+        catch (error) {
+            expect(await nlpTrainer.getIntents("4711"))
+                .toEqual(example_data_1.exampleMap);
+        }
     });
     it("throws an error for duplicate entries", async () => {
-        nlpTrainer.saveTrainingDataEntry("Unit Test Map", example_data_1.exampleMap);
+        await nlpTrainer.saveMapEntry("Unit Test Map", example_data_1.exampleMap);
         try {
-            nlpTrainer.saveTrainingDataEntry("Unit Test Map", example_data_1.exampleMap);
+            await nlpTrainer.saveMapEntry("Unit Test Map", example_data_1.exampleMap);
             fail("should have thrown an error for duplicate entries");
         }
         catch (error) {
@@ -52,7 +62,7 @@ describe("NLPTrainer", () => {
         const map = example_data_1.exampleMap;
         map.push(intentContainingAnswerWithUnknownAction);
         try {
-            await nlpTrainer.saveTrainingDataEntry("inconsistentTrainingData", map);
+            await nlpTrainer.saveMapEntry("inconsistentTrainingData", map);
             fail("please let me think about it");
         }
         catch (error) {
