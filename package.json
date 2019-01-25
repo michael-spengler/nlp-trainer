@@ -1,6 +1,6 @@
 {
   "name": "nlp-trainer",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "As simple as it gets",
   "main": "./dist/index.js",
   "typings": "./dist/index.js",
@@ -17,9 +17,8 @@
   "keywords": [
     "NLP",
     "Trainer",
-    "Natural",
-    "Language",
-    "Processing"
+    "Natural Language Processing Trainer",
+    "Natural Language Processing"
   ],
   "author": "Michael Spengler",
   "license": "MIT",
