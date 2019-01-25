@@ -70,14 +70,11 @@ class NLPTrainer {
     async getIntents(id) {
         // read from DB can be implemented here
         const filteredMaps = this.trainingDataLibrary.filter((map) => map.id === id);
-        if (filteredMaps.length > 1) {
-            throw new Error(`duplicate entries for id ${id}`);
-        }
-        else if (filteredMaps.length === 1) {
+        if (filteredMaps.length === 1) {
             return filteredMaps[0].intents;
         }
         else {
-            throw new Error(`Could not find training data for id: ${id}`);
+            throw new Error(`Could not find distinct training data for id: ${id}`);
         }
     }
 }
