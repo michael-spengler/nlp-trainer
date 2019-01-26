@@ -1,6 +1,6 @@
 {
   "name": "nlp-trainer",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "As simple as it gets",
   "main": "./dist/index.js",
   "typings": "./dist/index.js",
