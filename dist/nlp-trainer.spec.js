@@ -5,25 +5,25 @@ const nlp_trainer_1 = require("./nlp-trainer");
 describe("NLPTrainer", () => {
     it("saves and provides trainingdata", async () => {
         const nlpTrainer = new nlp_trainer_1.NLPTrainer();
-        const trainingDataEntry = await nlpTrainer.saveIntents("Unit Test Map", example_intents_1.exampleIntents);
+        const trainingDataEntry = await nlpTrainer.saveIntents("Unit Test Curriculum", example_intents_1.exampleIntents);
         expect(trainingDataEntry.id)
-            .toEqual("Unit Test Map");
+            .toEqual("Unit Test Curriculum");
         expect(trainingDataEntry.ownerID)
             .toBeDefined();
-        expect(await nlpTrainer.getIntents("Unit Test Map"))
+        expect(await nlpTrainer.getIntents("Unit Test Curriculum"))
             .toEqual(example_intents_1.exampleIntents);
     });
     it("deletes trainingdata entry", async () => {
         const nlpTrainer = new nlp_trainer_1.NLPTrainer();
-        const newMapEntry = await nlpTrainer.saveIntents("Unit Test Map", example_intents_1.exampleIntents);
-        await nlpTrainer.deleteIntents("Unit Test Map", newMapEntry.ownerID);
+        const curriculum = await nlpTrainer.saveIntents("Unit Test Curriculum", example_intents_1.exampleIntents);
+        await nlpTrainer.deleteIntents("Unit Test Curriculum", curriculum.ownerID);
         try {
-            await nlpTrainer.getIntents("Unit Test Map");
+            await nlpTrainer.getIntents("Unit Test Curriculum");
             fail("should raise an error");
         }
         catch (error) {
             expect(error.message)
-                .toEqual("Could not find distinct training data for id: Unit Test Map");
+                .toEqual("Could not find distinct training data for id: Unit Test Curriculum");
         }
     });
     it("does not delete trainingdata when ownerID is wrong", async () => {
@@ -40,14 +40,14 @@ describe("NLPTrainer", () => {
     });
     it("throws an error for duplicate entries", async () => {
         const nlpTrainer = new nlp_trainer_1.NLPTrainer();
-        await nlpTrainer.saveIntents("Unit Test Map", example_intents_1.exampleIntents);
+        await nlpTrainer.saveIntents("Unit Test Curriculum", example_intents_1.exampleIntents);
         try {
-            await nlpTrainer.saveIntents("Unit Test Map", example_intents_1.exampleIntents);
+            await nlpTrainer.saveIntents("Unit Test Curriculum", example_intents_1.exampleIntents);
             fail("should have thrown an error for duplicate entries");
         }
         catch (error) {
             expect(error.message)
-                .toEqual("tried to save duplicate entries for id Unit Test Map");
+                .toEqual("tried to save duplicate entries for id Unit Test Curriculum");
         }
     });
     it("rejects inconsistent training data", async () => {

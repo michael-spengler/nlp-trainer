@@ -1,6 +1,6 @@
 import * as uniqid from "uniqid"
 import { exampleIntents } from "./example-intents"
-import { IAnswer, IIntent, IMapEntry as IDataEntry } from "./types"
+import { IAnswer, ICurriculum, IIntent } from "./types"
 
 export class NLPTrainer {
 
@@ -32,10 +32,10 @@ export class NLPTrainer {
         return errors
     }
 
-    private readonly trainingDataLibrary: IDataEntry[] = []
+    private readonly trainingDataLibrary: ICurriculum[] = []
 
     public constructor() {
-        const exampleMapEntry: IDataEntry = {
+        const exampleMapEntry: ICurriculum = {
             id: "exampleMap",
             intents: exampleIntents,
             ownerID: "exampleUser",
@@ -48,7 +48,7 @@ export class NLPTrainer {
         // delete from DB can be implemented here
 
         const index: number = this.trainingDataLibrary.indexOf(
-            this.trainingDataLibrary.filter((entry: IDataEntry) => {
+            this.trainingDataLibrary.filter((entry: ICurriculum) => {
                 if (entry.id === id && entry.ownerID === ownerID) {
                     return entry
                 }
@@ -60,9 +60,9 @@ export class NLPTrainer {
         }
     }
 
-    public async saveIntents(id: string, trainingData: IIntent[]): Promise<IDataEntry> {
+    public async saveIntents(id: string, trainingData: IIntent[]): Promise<ICurriculum> {
 
-        if (this.trainingDataLibrary.some((entry: IDataEntry) => id === entry.id)) {
+        if (this.trainingDataLibrary.some((entry: ICurriculum) => id === entry.id)) {
             throw new Error(`tried to save duplicate entries for id ${id}`)
         }
 
@@ -70,7 +70,7 @@ export class NLPTrainer {
             throw new Error(`Errors while validating training data: \n${NLPTrainer.validateTrainingData(trainingData)}`)
         } else {
 
-            const newMapEntry: IDataEntry = {
+            const newMapEntry: ICurriculum = {
                 id,
                 intents: trainingData,
                 ownerID: uniqid(`ownerID-${new Date().toISOString()}`),
@@ -87,8 +87,8 @@ export class NLPTrainer {
 
         // read from DB can be implemented here
 
-        const filteredMaps: IDataEntry[] =
-            this.trainingDataLibrary.filter((map: IDataEntry) => map.id === id)
+        const filteredMaps: ICurriculum[] =
+            this.trainingDataLibrary.filter((map: ICurriculum) => map.id === id)
 
         if (filteredMaps.length === 1) {
             return filteredMaps[0].intents

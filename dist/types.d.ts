@@ -4,7 +4,7 @@ export interface IIntent {
     utterances: string[];
     answers: IAnswer[];
 }
-export interface IMapEntry {
+export interface ICurriculum {
     id: string;
     ownerID: string;
     intents: IIntent[];
