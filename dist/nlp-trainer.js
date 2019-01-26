@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const uniqid = require("uniqid");
-const example_data_1 = require("./example-data");
+const example_intents_1 = require("./example-intents");
 class NLPTrainer {
     constructor() {
         this.trainingDataLibrary = [];
         const exampleMapEntry = {
             id: "exampleMap",
-            intents: example_data_1.exampleMap,
+            intents: example_intents_1.exampleIntents,
             ownerID: "exampleUser",
         };
         this.trainingDataLibrary.push(exampleMapEntry);
@@ -35,7 +35,7 @@ class NLPTrainer {
         });
         return errors;
     }
-    async deleteMapEntry(id, ownerID) {
+    async deleteIntents(id, ownerID) {
         // delete from DB can be implemented here
         const index = this.trainingDataLibrary.indexOf(this.trainingDataLibrary.filter((entry) => {
             if (entry.id === id && entry.ownerID === ownerID) {
@@ -49,7 +49,7 @@ class NLPTrainer {
             this.trainingDataLibrary.splice(index, 1);
         }
     }
-    async saveMapEntry(id, trainingData) {
+    async saveIntents(id, trainingData) {
         if (this.trainingDataLibrary.some((entry) => id === entry.id)) {
             throw new Error(`tried to save duplicate entries for id ${id}`);
         }

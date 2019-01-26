@@ -1,5 +1,5 @@
 import * as uniqid from "uniqid"
-import { exampleMap } from "./example-data"
+import { exampleIntents } from "./example-intents"
 import { IAnswer, IIntent, IMapEntry as IDataEntry } from "./types"
 
 export class NLPTrainer {
@@ -37,13 +37,13 @@ export class NLPTrainer {
     public constructor() {
         const exampleMapEntry: IDataEntry = {
             id: "exampleMap",
-            intents: exampleMap,
+            intents: exampleIntents,
             ownerID: "exampleUser",
         }
         this.trainingDataLibrary.push(exampleMapEntry)
     }
 
-    public async deleteMapEntry(id: string, ownerID: string): Promise<void> {
+    public async deleteIntents(id: string, ownerID: string): Promise<void> {
 
         // delete from DB can be implemented here
 
@@ -60,7 +60,7 @@ export class NLPTrainer {
         }
     }
 
-    public async saveMapEntry(id: string, trainingData: IIntent[]): Promise<IDataEntry> {
+    public async saveIntents(id: string, trainingData: IIntent[]): Promise<IDataEntry> {
 
         if (this.trainingDataLibrary.some((entry: IDataEntry) => id === entry.id)) {
             throw new Error(`tried to save duplicate entries for id ${id}`)

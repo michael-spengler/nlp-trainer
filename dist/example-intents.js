@@ -1,6 +1,6 @@
-import { IIntent } from "./types"
-
-export const exampleMap: IIntent[] = [
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.exampleIntents = [
     {
         answers: [
             {
@@ -10,7 +10,8 @@ export const exampleMap: IIntent[] = [
             {
                 actions: [],
                 text: "see you soon!",
-            }],
+            }
+        ],
         language: "en",
         name: "greetings.bye",
         utterances: ["goodbye for now", "bye bye take care", "cu", "bye"],
@@ -20,18 +21,20 @@ export const exampleMap: IIntent[] = [
             {
                 actions: ["thumbs up", "thumbs down"],
                 text: "hey man",
-            }],
+            }
+        ],
         language: "en",
         name: "greetings.hello",
         utterances: ["hello how are you", "hi", "hey", "he", "hihi", "Hey. I'm |||name|||",
-                     "heyhey", "heyyyy how are you"],
+            "heyhey", "heyyyy how are you"],
     },
     {
         answers: [
             {
                 actions: [],
                 text: "You're welcome",
-            }],
+            }
+        ],
         language: "en",
         name: "say.thanks",
         utterances: ["Thanks", "thumbs up"],
@@ -41,9 +44,10 @@ export const exampleMap: IIntent[] = [
             {
                 actions: [],
                 text: "Which answer would you like better?",
-            }],
+            }
+        ],
         language: "en",
         name: "improve",
         utterances: ["thumbs down"],
     },
-]
+];
