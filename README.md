@@ -8,7 +8,7 @@ Please check my executable specifications / documentation [here](https://github.
 
 
 ## Example Data
-Feel free to explore example [training data](https://github.com/michael-spengler/nlp-trainer/blob/master/src/example-data.ts) and [its structure](https://github.com/michael-spengler/nlp-trainer/blob/master/src/types.ts).
+Feel free to explore example [training data](https://github.com/michael-spengler/nlp-trainer/blob/master/src/example-intents.ts) and [its structure](https://github.com/michael-spengler/nlp-trainer/blob/master/src/types.ts).
 
 ## Feedback
 If you find any issues or want to share improvement proposals in general feel free to open an issue or pull request [here](https://github.com/michael-spengler/nlp-trainer/issues).
